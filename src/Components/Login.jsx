@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import Axios from 'axios'
+import Api from './Api'
 
 export default class Login extends Component {
     state = {
@@ -31,7 +31,7 @@ export default class Login extends Component {
     submitHandler = (e) =>{
         e.preventDefault();
 
-        Axios.post('http://localhost:8000/api/login',this.state.input).then(res=>{
+        Api().post('login',this.state.input).then(res=>{
 
             let user = res.data
             localStorage.setItem('token',user.token)

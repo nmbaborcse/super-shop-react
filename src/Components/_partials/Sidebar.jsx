@@ -46,11 +46,11 @@ export default class Sidebar extends Component {
                     <a className="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
                         aria-expanded="true" aria-controls="collapseTwo">
                         <i className="fas fa-fw fa-cog"></i>
-                        <span>Components</span>
+                        <span>Settings</span>
                     </a>
                     <div id="collapseTwo" className="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                         <div className="bg-white py-2 collapse-inner rounded">
-                            <a className="collapse-item" href="buttons.html">Buttons</a>
+                        <NavLink className="collapse-item" to="/category">Category </NavLink>
                             <a className="collapse-item" href="cards.html">Cards</a>
                         </div>
                     </div>

@@ -9,6 +9,7 @@ export default class Router extends Component {
                 <Route path="/login" exact component={require('../Login').default} />
 
                 <AppRoute path="/" exact component={require('../pages/Dashboard').default} />
+                <AppRoute path="/category" exact component={require('../Settings/Category').default} />
 
                 <AppRoute path="/about" exact component={About} />
                 <AppRoute path="/blog" exact render={() => <div>Blog</div>}
