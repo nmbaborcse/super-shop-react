@@ -18,7 +18,7 @@ export default class MainLayout extends Component {
                 <footer className="sticky-footer bg-white">
                     <div className="container my-auto">
                         <div className="copyright text-center my-auto">
-                            <span>Copyright &copy; Your Website 2020</span>
+                            <span>Copyright &copy; Shop 2021</span>
                         </div>
                     </div>
                 </footer>
