@@ -3,13 +3,16 @@ import Api from '../Api'
 import Swal from 'sweetalert2'
 import {NavLink} from 'react-router-dom'
 
-export default class Category extends Component {
+export default class SubCategory extends Component {
 
     state = {
-        category : [],
+        category_id:this.props.match.params.id,
+        category:{},
+        subCategory : [],
         input:{
             name:'',
-            status:1
+            status:1,
+            category_id:this.props.match.params.id
         },
         process:false,
         editable:{
@@ -20,14 +23,16 @@ export default class Category extends Component {
     }
 
     componentDidMount(){
-        this.getCategory()
+
+        this.getSubCategory()
     }
 
-    getCategory = () =>{
-        Api().get('category').then(res=>{
-            console.log(res.data)
+    getSubCategory = () =>{
+        Api().get('sub-category?category_id='+this.state.category_id).then(res=>{
+            
             this.setState({
-                category:res.data,
+                subCategory:res.data.allData,
+                category:res.data.category,
                 process:false
             })
         }).catch(err=>{
@@ -51,7 +56,7 @@ export default class Category extends Component {
         this.setState({
             process:true
         })
-        Api().post('category',this.state.input).then(res=>{
+        Api().post('sub-category',this.state.input).then(res=>{
             Swal.fire({
                 icon: "success",
                 title: "Success",
@@ -65,7 +70,7 @@ export default class Category extends Component {
                     status:1
                 },
             })
-            this.getCategory()
+            this.getSubCategory()
         }).catch(err=>{
             this.setState({
                 process:false
@@ -99,7 +104,7 @@ export default class Category extends Component {
     editSubmit = (e) =>{
         e.preventDefault();
 
-        Api().put('category/'+this.state.editable.id,this.state.editable).then(res=>{
+        Api().put('sub-category/'+this.state.editable.id,this.state.editable).then(res=>{
             Swal.fire({
                 icon: "success",
                 title: "Success",
@@ -114,7 +119,7 @@ export default class Category extends Component {
                       name:''
                   }
               })
-              this.getCategory();
+              this.getSubCategory();
 
         }).catch(err=>{
             console.log(err)
@@ -123,7 +128,7 @@ export default class Category extends Component {
     
     deleteCategory(data,i){
 
-        Api().delete('category/'+data.id).then(res=>{
+        Api().delete('sub-category/'+data.id).then(res=>{
             
             Swal.fire({
                 icon: "success",
@@ -133,10 +138,10 @@ export default class Category extends Component {
                 showConfirmButton:false
               });
 
-            let category = this.state.category
-            category.splice(i,1)
+            let subCategory = this.state.subCategory
+            subCategory.splice(i,1)
             this.setState({
-                category:category
+                subCategory:subCategory
             })
         }).catch(err=>{
 
@@ -158,14 +163,15 @@ export default class Category extends Component {
             <>
                 <div className="card mb-4">
                     <div className="card-header">
-                    <b>Category</b>
+                    <b>Sub Category of {this.state.category.name} </b>
+                    <NavLink className="btn btn-success pull-right" to="/category"> All Category </NavLink>
                     </div>
                     <div className="card-body">
                         <div className="col-md-12">
                         <form onSubmit={this.submitHandler}>
                         <div className="form-group row">
                             <div className="col-md-6">
-                                <input type="text" name="name" placeholder="Category Name" value={this.state.input.name} className="form-control" onChange={this.inputHandle} />
+                                <input type="text" name="name" placeholder="Sub Category Name" value={this.state.input.name} className="form-control" onChange={this.inputHandle} />
                             </div>
                             <div className="col-md-2"><button type="submit" className="btn btn-primary"> {this.state.process && <i className="fa fa-spinner fa-spin"></i> }  Submit</button></div>
                         </div>
@@ -178,13 +184,12 @@ export default class Category extends Component {
                                     <th> SL </th>
                                     <th> Name </th>
                                     <th> Slug </th>
-                                    <th> Sub Category </th>
                                     <th> Status </th>
                                     <th> Action </th>
                                 </tr>
                             </thead>
                             <tbody>
-                                {this.state.category.map((data,i)=>{
+                                {this.state.subCategory.map((data,i)=>{
                                    return (
                                     <tr key={data.id}>
                                         <td>{i+1}</td>
@@ -212,7 +217,6 @@ export default class Category extends Component {
                                             
                                             </td>
                                         <td>{data.slug}</td>
-                                        <td> <NavLink className="btn btn-info" to={"/sub-category/"+data.id}> Sub Category ({data.sub_category_data_count}) </NavLink> </td>
                                         <td> {data.status==1?'Active':'Inactive'} </td>
                                         <td>
                                             <button className="btn btn-xs btn-info" onClick={ () => this.editButton(data,i)}> <i className="fa fa-edit"></i> </button>
